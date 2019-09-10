@@ -40,77 +40,48 @@ public class OpenWeatherMapClient {
 
     private static String URL = URL_HTTP;
 
-    private static WeatherData MOCK_WEATHER_DATA = null;
-
-    static {
-        try {
-            ClassPathResource resource = new ClassPathResource("mock/weather.json");
-            InputStream inputStream = resource.getInputStream();
-            String data = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining(System.lineSeparator()));
-            ObjectMapper mapper = new ObjectMapper();
-            MOCK_WEATHER_DATA = mapper.readValue(data, WeatherData.class);
-        } catch (IOException e) {
-            LOGGER.error("Failed to get mock data.", e);
-        }
-    }
-
-    @Value("${mock.enabled}")
-    private boolean mockEnabled = false;
+//    private static WeatherData MOCK_WEATHER_DATA = null;
+//
+//    static {
+//        try {
+//            ClassPathResource resource = new ClassPathResource("mock/weather.json");
+//            InputStream inputStream = resource.getInputStream();
+//            String data = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining(System.lineSeparator()));
+//            ObjectMapper mapper = new ObjectMapper();
+//            MOCK_WEATHER_DATA = mapper.readValue(data, WeatherData.class);
+//        } catch (IOException e) {
+//            LOGGER.error("Failed to get mock data.", e);
+//        }
+//    }
 
     @Autowired
-    @Qualifier("restProxyTemplate")
     private RestTemplate restTemplate;
 
     public CurrentWeatherSummary showCurrentWeather(String city) {
         city = StringUtils.isNotBlank(city) ? city : DEFAULT;
-
         CurrentWeatherSummary summary = new CurrentWeatherSummary();
         try {
-            WeatherData weatherData = null;
-            if (mockEnabled) {
-                weatherData = MOCK_WEATHER_DATA;
-
-                summary.setCityName(city);
-                summary.setCountry(weatherData.getSys().getCountry());
-                summary.setTemperature(randomDouble(weatherData.getMain().getTemp(), 10, 5));
-                summary.setImage(weatherData.getWeather().get(0).getIcon());
-                summary.setDate(weatherData.getDt());
-                summary.setWeather(weatherData.getWeather().get(0).getDescription());
-                summary.setWindSpeed(randomDouble(weatherData.getWind().getSpeed(), 2, 1));
-                summary.setCloudiness(weatherData.getWeather().get(0).getDescription());
-                summary.setCloudsDeg(weatherData.getClouds().getAll());
-                summary.setPressure(randomDouble(weatherData.getMain().getPressure(), 100, 50));
-                summary.setHumidity(randomDouble(weatherData.getMain().getHumidity(), 30, 15));
-                summary.setSunrise(weatherData.getSys().getSunrise());
-                summary.setSunset(weatherData.getSys().getSunset());
-                summary.setCoordinatesLon(weatherData.getCoord().getLon());
-                summary.setCoordinatesLat(weatherData.getCoord().getLat());
-            } else {
-                weatherData = restTemplate
-                        .getForObject(String.format(URL, APP_KEY, city), WeatherData.class);
-
-                summary.setCityName(weatherData.getName());
-                summary.setCountry(weatherData.getSys().getCountry());
-                summary.setTemperature(weatherData.getMain().getTemp());
-                summary.setImage(weatherData.getWeather().get(0).getIcon());
-                summary.setDate(weatherData.getDt());
-                summary.setWeather(weatherData.getWeather().get(0).getDescription());
-                summary.setWindSpeed(weatherData.getWind().getSpeed());
-                summary.setCloudiness(weatherData.getWeather().get(0).getDescription());
-                summary.setCloudsDeg(weatherData.getClouds().getAll());
-                summary.setPressure(weatherData.getMain().getPressure());
-                summary.setHumidity(weatherData.getMain().getHumidity());
-                summary.setSunrise(weatherData.getSys().getSunrise());
-                summary.setSunset(weatherData.getSys().getSunset());
-                summary.setCoordinatesLon(weatherData.getCoord().getLon());
-                summary.setCoordinatesLat(weatherData.getCoord().getLat());
-            }
+            WeatherData weatherData  = restTemplate
+                    .getForObject(String.format(URL, APP_KEY, city), WeatherData.class);
+            summary.setCityName(weatherData.getName());
+            summary.setCountry(weatherData.getSys().getCountry());
+            summary.setTemperature(weatherData.getMain().getTemp());
+            summary.setImage(weatherData.getWeather().get(0).getIcon());
+            summary.setDate(weatherData.getDt());
+            summary.setWeather(weatherData.getWeather().get(0).getDescription());
+            summary.setWindSpeed(weatherData.getWind().getSpeed());
+            summary.setCloudiness(weatherData.getWeather().get(0).getDescription());
+            summary.setCloudsDeg(weatherData.getClouds().getAll());
+            summary.setPressure(weatherData.getMain().getPressure());
+            summary.setHumidity(weatherData.getMain().getHumidity());
+            summary.setSunrise(weatherData.getSys().getSunrise());
+            summary.setSunset(weatherData.getSys().getSunset());
+            summary.setCoordinatesLon(weatherData.getCoord().getLon());
+            summary.setCoordinatesLat(weatherData.getCoord().getLat());
         } catch (Exception e) {
             LOGGER.error("Failed to get the current weather data from OpenWeatherMap with " + city, e);
-
             swtichURL();
         }
-
         return summary;
     }
 

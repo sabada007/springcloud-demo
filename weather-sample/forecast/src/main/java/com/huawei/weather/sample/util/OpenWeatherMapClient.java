@@ -45,25 +45,22 @@ public class OpenWeatherMapClient {
 
     private static String URL = URL_HTTP;
 
-    private static ForecastData MOCK_FORECAST_DATA = null;
+//    private static ForecastData MOCK_FORECAST_DATA = null;
+//
+//    static {
+//        try {
+//            ClassPathResource resource = new ClassPathResource("mock/forecast.json");
+//            InputStream inputStream = resource.getInputStream();
+//            String data = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining(System.lineSeparator()));
+//            ObjectMapper mapper = new ObjectMapper();
+//            MOCK_FORECAST_DATA = mapper.readValue(data, ForecastData.class);
+//        } catch (IOException e) {
+//            LOGGER.error("Failed to get mock data.", e);
+//        }
+//    }
 
-    static {
-        try {
-            ClassPathResource resource = new ClassPathResource("mock/forecast.json");
-            InputStream inputStream = resource.getInputStream();
-            String data = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining(System.lineSeparator()));
-            ObjectMapper mapper = new ObjectMapper();
-            MOCK_FORECAST_DATA = mapper.readValue(data, ForecastData.class);
-        } catch (IOException e) {
-            LOGGER.error("Failed to get mock data.", e);
-        }
-    }
-
-    @Value("${mock.enabled}")
-    private boolean mockEnabled = false;
 
     @Autowired
-    @Qualifier("restProxyTemplate")
     private RestTemplate restTemplate;
 
     public ForecastSummary showForecastWeather(String city) {
@@ -73,33 +70,18 @@ public class OpenWeatherMapClient {
 
         ForecastSummary summary = new ForecastSummary();
         try {
-            ForecastData forecastData = null;
-            if (mockEnabled) {
-                forecastData = MOCK_FORECAST_DATA;
-                LOGGER.info("using mock data, end showForecastWeather from openweather cost " + (System.currentTimeMillis() - l));
-                summary.setCityName(city);
-                summary.setCountry(forecastData.getCity().getCountry());
-                summary.setCoordinatesLat(forecastData.getCity().getCoord().getLat());
-                summary.setCoordinatesLon(forecastData.getCity().getCoord().getLon());
-                List<DateListItem> dateListItemList = new ArrayList<DateListItem>();
-                for (ListItem i : forecastData.getList()) {
-                    dateListItemList.add(toDateListItemMock(i));
-                }
-                summary.setDateList(dateListItemList);
-            } else {
-                forecastData = restTemplate.getForObject(String.format(URL, APP_KEY, city),
-                        ForecastData.class);
-                LOGGER.info("end showForecastWeather from openweather cost " + (System.currentTimeMillis() - l));
-                summary.setCityName(forecastData.getCity().getName());
-                summary.setCountry(forecastData.getCity().getCountry());
-                summary.setCoordinatesLat(forecastData.getCity().getCoord().getLat());
-                summary.setCoordinatesLon(forecastData.getCity().getCoord().getLon());
-                List<DateListItem> dateListItemList = new ArrayList<DateListItem>();
-                for (ListItem i : forecastData.getList()) {
-                    dateListItemList.add(toDateListItem(i));
-                }
-                summary.setDateList(dateListItemList);
+            ForecastData forecastData  = restTemplate.getForObject(String.format(URL, APP_KEY, city),
+                    ForecastData.class);
+            LOGGER.info("end showForecastWeather from openweather cost " + (System.currentTimeMillis() - l));
+            summary.setCityName(forecastData.getCity().getName());
+            summary.setCountry(forecastData.getCity().getCountry());
+            summary.setCoordinatesLat(forecastData.getCity().getCoord().getLat());
+            summary.setCoordinatesLon(forecastData.getCity().getCoord().getLon());
+            List<DateListItem> dateListItemList = new ArrayList<DateListItem>();
+            for (ListItem i : forecastData.getList()) {
+                dateListItemList.add(toDateListItem(i));
             }
+            summary.setDateList(dateListItemList);
         } catch (Exception e) {
             LOGGER.error("Failed to get the forecast weather data form OpenWeatherMap with " + city, e);
 
