@@ -4,7 +4,7 @@ spring:
   application:
     name: demo-provider
   rabbitmq:
-    host: ${mqhost:10.67.45.196}
+    host: ${mqhost:127.0.0.1}
     port: ${mqport:5672}
     username: ${mquser:rkd}
     password: ${mqpassword:pwd}
