@@ -75,7 +75,7 @@
 -----
 ### 创建前台应用
 1. 登录ServiceStage，选择“应用管理 > 应用列表”，单击“创建应用”。
-2. 选择“Spring Cloud”，然后单击“创建应用”。
+2. 选择“Web应用”，然后单击“创建应用”。
 3. 进行如下设置。
    * “运行环境”选择“Docker”。
    * 填写“应用名称”，设置为weathermapweb-sc。
@@ -93,7 +93,7 @@
    |      类型        |  变量名     |    变量值       | 
    | --------------- | -----------   | ------------  | 
    |    手动添加      | HTTP_PROXY_HOST |   (填写fusionweather的集群内IP）    | 
-   |    手动添加      | HTTP_PROXY_PORT |   (填写创建fusionweather的集群内PORT） |
+   |    手动添加      | HTTP_PROXY_PORT |   (填写fusionweather的集群内PORT） |
       
 5. 单击“下一步”，确认规格，单击“创建”，创建应用。
 6 .应用创建成功后，在“应用列表”页单击“weathermapweb”，进入应用详情页。
