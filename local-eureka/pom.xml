@@ -9,18 +9,24 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>provider</artifactId>
+    <artifactId>local-eureka</artifactId>
 
     <properties>
-        <demo.main>com.huawei.provider.SpringcloudDemoApplication</demo.main>
+        <demo.main>com.huawei.eureka.EurekaServerDemoApplication</demo.main>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-config-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka-server</artifactId>
+            <version>1.3.5.RELEASE</version>
         </dependency>
     </dependencies>
+
 
     <build>
         <plugins>

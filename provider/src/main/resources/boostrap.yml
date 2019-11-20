@@ -1,0 +1,11 @@
+server:
+  port: 8876
+
+spring:
+  cloud:
+    config:
+      uri: http://localhost:8888 #配置中心的地址
+      profile: dev
+      label: master
+  application:
+    name:  demo-provider

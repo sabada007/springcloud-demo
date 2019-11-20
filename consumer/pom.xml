@@ -14,7 +14,13 @@
     <properties>
         <demo.main>com.huawei.consumer.SpringcloudDemoApplication</demo.main>
     </properties>
-
+    <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>27.0.1-jre</version>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
