@@ -1,7 +1,7 @@
 {
-  "mqhost":"192.168.0.100",
-  "mqport":"30117",
-  "mquser":"root",
-  "mqpassword":"****",
-  "eureka":"http://192.168.0.100:30115/eureka/"
-}
+	  "mqhost":"192.168.1.12",
+	  "mqport":"30117",
+	  "mquser":"root",
+	  "mqpassword":"root_007",
+	  "eureka":"https://192.168.1.12:30115/eureka/"
+	}	
